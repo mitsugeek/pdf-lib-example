@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="./js/pdf-lib.min.js"></script>
+    <script src="./js/fontkit.umd.min.js"></script>
+    <script src="./js/download.js"></script>
+    <title>pdf-lib.jsを利用して日本語を印刷</title>
+  </head>
+  <body>
+    <p>ボタンをクリックして、pdf-libで新しいPDFドキュメントを作成します</p>
+    <button onclick="createPdf()">PDFを作成する</button>
+    <p class="small">(ブラウザは結果のファイルをダウンロードします)</p>
+  </body>
+  <script>
+    const { PDFDocument, rgb } = PDFLib
+    async function createPdf() {
+      const pdfDoc = await PDFDocument.create();
+      pdfDoc.registerFontkit(fontkit);
+      const url = './font/DotGothic16-Regular.ttf';
+      const fontBytes = await fetch(url).then((res) => res.arrayBuffer());
+      const font = await pdfDoc.embedFont(fontBytes);
+      const page = pdfDoc.addPage();
+      page.drawText('勇者は頑張ってjavascriptでpdfを印刷し...',{x: 0,y: 800, size: 30,font: font,color: rgb(0,0,0)});
+      page.drawText('勇者は頑張ってjavascriptでpdfを印刷し...',{x: 0,y: 770, size: 20,font: font,color: rgb(0,0,0)});
+      page.drawText('勇者は頑張ってjavascriptでpdfを印刷し...',{x: 0,y: 750, size: 10,font: font,color: rgb(0,0,0)});
+      page.drawText('勇者は頑張ってjavascriptでpdfを印刷し...',{x: 0,y: 740, size: 8,font: font,color: rgb(0,0,0)});
+      const pdfBytes = await pdfDoc.save();
+      download(pdfBytes, "勇者は.pdf", "application/pdf");
+    }
+  </script>
+</html>
